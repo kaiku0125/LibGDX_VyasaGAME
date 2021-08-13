@@ -12,20 +12,28 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import static jdk.nashorn.internal.objects.NativeMath.log;
+import libs.Log;
+import static libs.Log.DEBUG;
 
 public class VyasaGame extends Game {
 	private final static String TAG = "VyasaGame";
-	private final static boolean DEBUG = true;
 
-
+	ScreenManager manager;
 	LabyrinthScreen labyrinthScreen;
+	MainScreen mainScreen;
 	
 	@Override
 	public void create () {
-		if(DEBUG) log(TAG, "create");
-		labyrinthScreen = new LabyrinthScreen();
-		setScreen(labyrinthScreen);
+		if(DEBUG) Log.e(TAG, "create");
+
+		manager = ScreenManager.getInstance();
+		manager.init(this);
+
+		manager.setScreen(manager.getScreen(ScreenManager.MAIN));
+
+//		labyrinthScreen = new LabyrinthScreen();
+//		mainScreen = new MainScreen();
+//		setScreen(mainScreen);
 
 	}
 
@@ -33,18 +41,16 @@ public class VyasaGame extends Game {
 	public void render () {
 		super.render();
 
-//		Gdx.app.error(TAG, String.valueOf(Gdx.graphics.getFramesPerSecond()));
 	}
 	
 	@Override
 	public void dispose () {
-		if(DEBUG) log(TAG, "dispose");
-		labyrinthScreen.dispose();
+		if(DEBUG) Log.e(TAG, "dispose");
+//		labyrinthScreen.dispose();
 	}
 
-	private void log(String tag, String msg){
-		Gdx.app.error(tag, msg);
-	}
+
+
 
 
 }

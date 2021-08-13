@@ -11,11 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
 public class PlayerActor extends Actor {
-    private Sprite sprite;
-    private LabyrinthScreen.Cell player;
+    private Cell player;
     Rectangle rect;
 
-    public PlayerActor(LabyrinthScreen.Cell cell, Action action){
+    public PlayerActor(Cell cell, Action action){
         this.player = cell;
         rect = new Rectangle(cell.leftX(), cell.bottomY(), cell.cellSize, cell.cellSize);
         addAction(action);

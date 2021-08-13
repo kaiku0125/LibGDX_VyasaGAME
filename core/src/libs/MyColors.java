@@ -1,11 +1,14 @@
 package libs;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 
 import java.util.HashMap;
 
 public enum MyColors {
-    MAYA_BLUE("maya_blue",77f/255f, 195f/255f, 255f/255f, 1);
+    MAYA_BLUE("maya_blue",77f/255f, 195f/255f, 255f/255f, 1),
+    TEXT_DARK_BLUE("text_dark_blue", 102/255f, 21/255f, 255/255f, 1),
+    TEXT_SHADOW_GREEN("text_shadow_green", 102f/255f, 255f/255f, 102f/255f, 1);
 
     private float r, g, b, alpha;
     private String name;

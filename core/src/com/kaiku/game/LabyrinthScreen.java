@@ -19,8 +19,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
+import libs.Log;
 import libs.MyColors;
 
+import static libs.Log.DEBUG;
 import static libs.MyColors.*;
 
 
@@ -30,14 +32,12 @@ public class LabyrinthScreen implements Screen {
     }
     private Direction currentDir = Direction.NONE;
     private static final String TAG = "LabyrinthView";
-    private final static boolean DEBUG = false;
     private Cell[][] cells;
     private Cell player, nextMovement, previousMovement;
     private ArrayList<Cell> snake = new ArrayList<>();
     private static final int COLS = 12;
     private static final int ROWS = 12;
     private float cellSize, hMargin, vMargin;
-    private float speed = 40f;
     private float x, y;
     private Random random;
     private PlayerActor pActor;
@@ -61,6 +61,7 @@ public class LabyrinthScreen implements Screen {
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         sr = new ShapeRenderer();
         random = new Random();
+        batch = new SpriteBatch();
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
         createLabyrinth();
@@ -99,22 +100,22 @@ public class LabyrinthScreen implements Screen {
             return;
         ArrayList<Direction> directions = new ArrayList<>();
         if(!cells[player.col][player.row].topWall && !cells[player.col][player.row + 1].visited){
-            log(TAG, "run: top" );
+            Log.e(TAG, "run: top" );
             directions.add(Direction.UP);
 
         }
         if(!cells[player.col][player.row].leftWall && !cells[player.col - 1][player.row].visited){
-            log(TAG, "run: left" );
+            Log.e(TAG, "run: left" );
             directions.add(Direction.LEFT);
 
         }
         if(!cells[player.col][player.row].bottomWall && !cells[player.col][player.row - 1].visited){
-            log(TAG, "run: bottom" );
+            Log.e(TAG, "run: bottom" );
             directions.add(Direction.DOWN);
 
         }
         if(!cells[player.col][player.row].rightWall && !cells[player.col + 1][player.row].visited){
-            log(TAG, "run: right" );
+            Log.e(TAG, "run: right" );
             directions.add(Direction.RIGHT);
         }
 
@@ -130,7 +131,7 @@ public class LabyrinthScreen implements Screen {
     }
 
     private void goDir(Direction direction){
-        log(TAG, "goDir : " + direction.toString());
+        if(DEBUG) Log.e(TAG, "goDir : " + direction.toString());
         switch (direction){
             case UP:
                 nextMovement = cells[player.col][player.row+1];
@@ -195,9 +196,9 @@ public class LabyrinthScreen implements Screen {
             case NONE:
                 break;
         }
-        if(DEBUG) log(TAG, "rectX = " + rect.x + " ,rectY = " + rect.y);
-        if(DEBUG) log(TAG, "nextX = " + (nextMovement.centerX() - 0.4f*cellSize));
-        if(DEBUG) log(TAG, "nextY = " + (nextMovement.centerY() - 0.4*cellSize));
+        if(DEBUG) Log.e(TAG, "rectX = " + rect.x + " ,rectY = " + rect.y);
+        if(DEBUG) Log.e(TAG, "nextX = " + (nextMovement.centerX() - 0.4f*cellSize));
+        if(DEBUG) Log.e(TAG, "nextY = " + (nextMovement.centerY() - 0.4*cellSize));
 
     }
 
@@ -226,7 +227,7 @@ public class LabyrinthScreen implements Screen {
     private void renderPlayer(){
         sr.setColor(Color.RED);
 
-        if(DEBUG) log(TAG, player.centerX() + "," + player.centerY());
+        if(DEBUG) Log.e(TAG, player.centerX() + "," + player.centerY());
 
         sr.rect(player.centerX() - cellSize*0.4f, player.centerY() - cellSize*0.4f , cellSize*0.8f, cellSize*0.8f);
 
@@ -238,11 +239,11 @@ public class LabyrinthScreen implements Screen {
         }else{
             cellSize = Math.round(WORLD_HEIGHT / (ROWS + 1f));
         }
-        log(TAG, "cellSize : " + cellSize);
+        Log.e(TAG, "cellSize : " + cellSize);
         hMargin = (WORLD_WIDTH - COLS * cellSize) / 2;
         vMargin = (WORLD_HEIGHT - ROWS * cellSize) / 2;
         if(hMargin < 0 || vMargin < 0){
-            log(TAG, "onDraw: onDraw position error !!");
+            Log.e(TAG, "onDraw: onDraw position error !!");
             return;
         }
 //        if(DEBUG) log(TAG, "hMargin:" + hMargin + "vMargin" + vMargin);
@@ -263,11 +264,10 @@ public class LabyrinthScreen implements Screen {
         action.setDuration(2f);
         pActor = new PlayerActor(player, action);
         texture = pActor.getPixmapTexture(Color.RED);
-        batch = new SpriteBatch();
+
         rect = new Rectangle(player.centerX() - cellSize*0.4f, player.centerY() - cellSize*0.4f , cellSize*0.8f, cellSize*0.8f);
 
         previousMovement = cells[0][0];
-
 
         current = cells[6][6];
         current.visited = true;
@@ -284,49 +284,14 @@ public class LabyrinthScreen implements Screen {
             }
         } while(!stack.empty());
 
+        remove_random_walls(5);
+
         for(int x = 0; x < COLS; x++){
             for(int y = 0; y < ROWS; y++){
                 cells[x][y].visited = false;
             }
         }
         snake.add(player);
-    }
-
-    public class Cell{
-        public boolean topWall = true;
-        public boolean leftWall = true;
-        public boolean bottomWall = true;
-        public boolean rightWall = true;
-        public boolean visited = false;
-
-        public int col, row;
-        public float cellSize, vMargin, hMargin;
-
-        public Cell(int col, int row, float cellSize, float hMargin, float vMargin){
-            this.col = col;
-            this.row = row;
-            this.cellSize = cellSize;
-            this.vMargin = vMargin;
-            this.hMargin = hMargin;
-        }
-
-        public float centerX(){
-            return hMargin + cellSize * col + cellSize * 0.5f;
-        }
-
-        public float centerY(){
-            return vMargin + cellSize * row + cellSize * 0.5f;
-        }
-
-        public float leftX(){
-            return hMargin + cellSize * col;
-        }
-
-        public float bottomY(){
-            return vMargin + cellSize * row;
-        }
-
-
     }
 
     private Cell getNeighbor(Cell cell){
@@ -416,9 +381,54 @@ public class LabyrinthScreen implements Screen {
     @Override
     public void dispose() {
         sr.dispose();
+        stage.dispose();
     }
 
-    private void log(String tag, String msg){
-        Gdx.app.error(tag, msg);
+    private void remove_random_walls(int many){
+        for(int i = 0; i < many; i++){
+            Random rCol = new Random();
+            int col = rCol.nextInt(9) + 1;
+            Random rRow = new Random();
+            int row = rRow.nextInt(9) + 1;
+            if(DEBUG) Log.e(TAG, "remove_random_walls: col:" + col + "row" + row);
+            Direction direction;
+            ArrayList<Direction> directions = new ArrayList<>();
+            if(cells[col][row].topWall){
+                directions.add(Direction.UP);
+            }
+            if(cells[col][row].leftWall){
+                directions.add(Direction.LEFT);
+            }
+            if(cells[col][row].bottomWall){
+                directions.add(Direction.DOWN);
+            }
+            if(cells[col][row].rightWall){
+                directions.add(Direction.RIGHT);
+            }
+            if(directions.size() != 0){
+                int index = random.nextInt(directions.size());
+                Log.e(TAG, "remove_random_walls: index:" + index);
+                direction = directions.get(index);
+                switch (direction){
+                    case UP:
+                        cells[col][row].topWall = false;
+                        cells[col][row+1].bottomWall = false;
+                        break;
+                    case LEFT:
+                        cells[col][row].leftWall = false;
+                        cells[col-1][row].rightWall = false;
+                        break;
+                    case DOWN:
+                        cells[col][row].bottomWall = false;
+                        cells[col][row-1].topWall = false;
+                        break;
+                    case RIGHT:
+                        cells[col][row].rightWall = false;
+                        cells[col+1][row].leftWall = false;
+                        break;
+                }
+
+            }
+        }
     }
 }
