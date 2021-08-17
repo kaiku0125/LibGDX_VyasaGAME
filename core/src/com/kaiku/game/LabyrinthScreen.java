@@ -31,7 +31,7 @@ public class LabyrinthScreen implements Screen {
         NONE, UP, DOWN, LEFT, RIGHT, MOVING
     }
     private Direction currentDir = Direction.NONE;
-    private static final String TAG = "LabyrinthView";
+    private static final String TAG = "LabyrinthScreen";
     private Cell[][] cells;
     private Cell player, nextMovement, previousMovement;
     private ArrayList<Cell> snake = new ArrayList<>();
@@ -390,7 +390,7 @@ public class LabyrinthScreen implements Screen {
             int col = rCol.nextInt(9) + 1;
             Random rRow = new Random();
             int row = rRow.nextInt(9) + 1;
-            if(DEBUG) Log.e(TAG, "remove_random_walls: col:" + col + "row" + row);
+//            if(DEBUG) Log.e(TAG, "remove_random_walls: col:" + col + "row" + row);
             Direction direction;
             ArrayList<Direction> directions = new ArrayList<>();
             if(cells[col][row].topWall){
