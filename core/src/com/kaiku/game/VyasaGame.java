@@ -1,16 +1,7 @@
 package com.kaiku.game;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 import libs.Log;
 import static libs.Log.DEBUG;
@@ -20,7 +11,7 @@ public class VyasaGame extends Game {
 
 	ScreenManager manager;
 	LabyrinthScreen labyrinthScreen;
-	MainScreen mainScreen;
+	LoginScreen loginScreen;
 	
 	@Override
 	public void create () {
@@ -29,11 +20,10 @@ public class VyasaGame extends Game {
 		manager = ScreenManager.getInstance();
 		manager.init(this);
 
-		manager.setScreen(manager.getScreen(ScreenManager.MAIN));
+		manager.setScreen(manager.createScreen(ScreenManager.LOGIN));
+//		manager.setScreen(manager.getScreen(ScreenManager.LOGIN));
+		Gdx.input.setCatchBackKey(true);
 
-//		labyrinthScreen = new LabyrinthScreen();
-//		mainScreen = new MainScreen();
-//		setScreen(mainScreen);
 
 	}
 
@@ -46,6 +36,7 @@ public class VyasaGame extends Game {
 	@Override
 	public void dispose () {
 		if(DEBUG) Log.e(TAG, "dispose");
+
 //		labyrinthScreen.dispose();
 	}
 

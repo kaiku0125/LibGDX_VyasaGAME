@@ -1,6 +1,10 @@
 package com.kaiku.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -40,9 +44,11 @@ public class LabyrinthScreen implements Screen {
     private float cellSize, hMargin, vMargin;
     private float x, y;
     private Random random;
+    private ScreenManager manager;
     private PlayerActor pActor;
     private MoveToAction action;
     private Stage stage;
+
 
     private Camera camera;
     private Viewport viewport;
@@ -57,13 +63,14 @@ public class LabyrinthScreen implements Screen {
     private final int WORLD_HEIGHT = Gdx.graphics.getHeight();
 
     LabyrinthScreen(){
+        Log.e(TAG, "create LabyrinthScreen..........");
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         sr = new ShapeRenderer();
         random = new Random();
         batch = new SpriteBatch();
         stage = new Stage(viewport);
-        Gdx.input.setInputProcessor(stage);
+        manager = ScreenManager.getInstance();
         createLabyrinth();
 //        stage.addActor(pActor);
 
@@ -92,6 +99,7 @@ public class LabyrinthScreen implements Screen {
             goDir(currentDir);
         }
         batch.end();
+
     }
 
     private void checkNextPosition(){
@@ -204,6 +212,7 @@ public class LabyrinthScreen implements Screen {
 
 
     private void renderLabyrinth(){
+//        Log.e(TAG, "renderLabyrinth");
         sr.setColor(Color.BLACK);
         for(int x = 0; x < COLS; x++){
             for(int y = 0; y < ROWS; y++){
@@ -375,6 +384,18 @@ public class LabyrinthScreen implements Screen {
 
     @Override
     public void show() {
+        InputProcessor backProcessor = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if(keycode == Input.Keys.BACK){
+//                    manager.setScreen(manager.getScreen(ScreenManager.LOGIN));
+                    manager.setScreen(manager.createScreen(ScreenManager.LOGIN));
+                }
+                return false;
+            }
+        };
+        InputMultiplexer multiplexer = new InputMultiplexer(stage, backProcessor);
+        Gdx.input.setInputProcessor(multiplexer);
 
     }
 
@@ -382,7 +403,11 @@ public class LabyrinthScreen implements Screen {
     public void dispose() {
         sr.dispose();
         stage.dispose();
+        batch.dispose();
+        texture.dispose();
     }
+
+
 
     private void remove_random_walls(int many){
         for(int i = 0; i < many; i++){
@@ -431,4 +456,6 @@ public class LabyrinthScreen implements Screen {
             }
         }
     }
+
+
 }
