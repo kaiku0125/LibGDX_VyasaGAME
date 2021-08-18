@@ -108,22 +108,22 @@ public class LabyrinthScreen implements Screen {
             return;
         ArrayList<Direction> directions = new ArrayList<>();
         if(!cells[player.col][player.row].topWall && !cells[player.col][player.row + 1].visited){
-            Log.e(TAG, "run: top" );
+//            Log.e(TAG, "run: top" );
             directions.add(Direction.UP);
 
         }
         if(!cells[player.col][player.row].leftWall && !cells[player.col - 1][player.row].visited){
-            Log.e(TAG, "run: left" );
+//            Log.e(TAG, "run: left" );
             directions.add(Direction.LEFT);
 
         }
         if(!cells[player.col][player.row].bottomWall && !cells[player.col][player.row - 1].visited){
-            Log.e(TAG, "run: bottom" );
+//            Log.e(TAG, "run: bottom" );
             directions.add(Direction.DOWN);
 
         }
         if(!cells[player.col][player.row].rightWall && !cells[player.col + 1][player.row].visited){
-            Log.e(TAG, "run: right" );
+//            Log.e(TAG, "run: right" );
             directions.add(Direction.RIGHT);
         }
 
@@ -389,7 +389,7 @@ public class LabyrinthScreen implements Screen {
             public boolean keyDown(int keycode) {
                 if(keycode == Input.Keys.BACK){
 //                    manager.setScreen(manager.getScreen(ScreenManager.LOGIN));
-                    manager.setScreen(manager.createScreen(ScreenManager.LOGIN));
+                    manager.setScreen(manager.createScreen(ScreenManager.MAIN));
                 }
                 return false;
             }
@@ -432,7 +432,7 @@ public class LabyrinthScreen implements Screen {
             }
             if(directions.size() != 0){
                 int index = random.nextInt(directions.size());
-                Log.e(TAG, "remove_random_walls: index:" + index);
+//                Log.e(TAG, "remove_random_walls: index:" + index);
                 direction = directions.get(index);
                 switch (direction){
                     case UP:
@@ -454,6 +454,12 @@ public class LabyrinthScreen implements Screen {
                 }
 
             }
+        }
+    }
+
+    private void createElementsInLabyrinth(int many){
+        for(int i = 0; i < many; i++){
+
         }
     }
 

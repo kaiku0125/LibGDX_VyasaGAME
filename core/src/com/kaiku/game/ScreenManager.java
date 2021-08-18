@@ -10,6 +10,7 @@ import libs.Log;
 public class ScreenManager {
     private static final String TAG = "ScreenManager";
     public static final String LOGIN = "login";
+    public static final String MAIN = "main";
     public static final String LABYRINTH = "labyrinth";
     private static volatile ScreenManager instance;
     private Game game;
@@ -68,6 +69,8 @@ public class ScreenManager {
         switch (key){
             case LOGIN:
                 return new LoginScreen();
+            case MAIN:
+                return new MainScreen();
             case LABYRINTH:
                 return new LabyrinthScreen();
             default:

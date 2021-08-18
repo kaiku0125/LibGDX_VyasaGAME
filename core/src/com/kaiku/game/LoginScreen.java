@@ -30,7 +30,7 @@ import libs.Log;
 import libs.MyColor;
 
 public class LoginScreen implements Screen {
-    private final static String TAG = "MainScreen";
+    private final static String TAG = "LoginScreen";
     private final String LOGIN = "登入";
     private static boolean focus = false;
     private Stage stage;
@@ -59,6 +59,7 @@ public class LoginScreen implements Screen {
     }
 
     private void initUI(){
+        //處理 textfield focus 問題
         stage.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -82,7 +83,7 @@ public class LoginScreen implements Screen {
         titleLabel.setSize(stage.getWidth(), 200);
         titleLabel.setAlignment(Align.center);
         Label.LabelStyle style = new Label.LabelStyle();
-        style.background = new Image(new Texture(setLabelColor(titleLabel.getWidth(), titleLabel.getHeight(), Color.SKY))).getDrawable();
+//        style.background = new Image(new Texture(setLabelColor(titleLabel.getWidth(), titleLabel.getHeight(), Color.SKY))).getDrawable();
         style.font = setParameter("凱酷修真", 90, MyColor.ALMOND, MyColor.TEXT_SHADOW_GREEN, 1,1);
         titleLabel.setStyle(style);
 
@@ -108,7 +109,7 @@ public class LoginScreen implements Screen {
 //                Log.e(TAG, "x :" + x + "y : "+ y);
 //                manager.setScreen(manager.getScreen(ScreenManager.LABYRINTH));
 
-                manager.setScreen(manager.createScreen(ScreenManager.LABYRINTH));
+                manager.setScreen(manager.createScreen(ScreenManager.MAIN));
 
             }
         });
